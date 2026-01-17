@@ -8,8 +8,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Stegogram')
     .setDescription('The stegogram API description')
-    .setVersion('1.0')
-    .addTag('cats')
+    .setVersion('26w3a')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
