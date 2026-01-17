@@ -11,7 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { ApiUser } from 'src/users/interfaces/api-user.interface';
@@ -39,6 +39,11 @@ export class PostsController {
   @ApiOperation({ summary: 'Upload an image for a post' })
   @ApiResponse({ status: 200, description: 'Image uploaded successfully' })
   @ApiResponse({ status: 403, description: 'User not logged in' })
+  @ApiParam({
+    name: 'image',
+    description: 'The JPEG image to upload',
+    type: 'file',
+  })
   @UseInterceptors(FileInterceptor('image'))
   @Post('upload-image')
   async uploadImage(
