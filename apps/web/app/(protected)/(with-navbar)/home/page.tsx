@@ -1,8 +1,6 @@
 'use client';
 
-import CommentsDialog from '@/components/organisms/commentsDialog';
 import Post from '@/components/organisms/post';
-import { useState } from 'react';
 
 const SAMPLE_POSTS = [
 	{
@@ -38,21 +36,13 @@ const SAMPLE_POSTS = [
 ];
 
 export default function HomePage() {
-	const [commentsOpen, setCommentsOpen] = useState(false);
-
 	return (
 		<div className="bg-white">
 			<div className="space-y-6 p-4">
 				{SAMPLE_POSTS.map((post, index) => (
-					<Post
-						key={index}
-						{...post}
-						onCommentClick={() => setCommentsOpen(true)}
-					/>
+					<Post key={index} {...post} />
 				))}
 			</div>
-
-			<CommentsDialog open={commentsOpen} onOpenChange={setCommentsOpen} />
 		</div>
 	);
 }

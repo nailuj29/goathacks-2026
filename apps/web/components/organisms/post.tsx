@@ -4,6 +4,9 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { MessageCircle } from 'lucide-react';
+import CommentsDialog from './commentsDialog';
+import HiddenDialog from './hiddenDialog';
+import { useState } from 'react';
 
 interface PostProps {
 	postId: string;
@@ -13,7 +16,6 @@ interface PostProps {
 	avatarFallback: string;
 	imageUrl: string;
 	caption: string;
-	onCommentClick: (postId: string) => void;
 }
 
 export default function Post({
@@ -24,8 +26,10 @@ export default function Post({
 	imageUrl,
 	caption,
 	postId,
-	onCommentClick,
 }: PostProps) {
+	const [commentsOpen, setCommentsOpen] = useState(false);
+	const [showHiddenDialog, setShowHiddenDialog] = useState(false);
+
 	return (
 		<>
 			<div className="border rounded-lg overflow-hidden">
@@ -59,7 +63,7 @@ export default function Post({
 						variant="ghost"
 						size="icon"
 						onClick={() => {
-							onCommentClick(postId);
+							setCommentsOpen(true);
 						}}
 						className="ml-2"
 					>
@@ -67,6 +71,19 @@ export default function Post({
 					</Button>
 				</div>
 			</div>
+
+			<CommentsDialog
+				open={commentsOpen}
+				onOpenChange={setCommentsOpen}
+				onShowHidden={() => {
+					setCommentsOpen(false);
+					setShowHiddenDialog(true);
+				}}
+			/>
+			<HiddenDialog
+				open={showHiddenDialog}
+				onOpenChange={setShowHiddenDialog}
+			/>
 		</>
 	);
 }

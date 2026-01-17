@@ -22,6 +22,7 @@ interface CommentData {
 interface CommentsDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
+	onShowHidden: () => void;
 	comments?: CommentData[];
 }
 
@@ -53,6 +54,7 @@ export default function CommentsDialog({
 	open,
 	onOpenChange,
 	comments = SAMPLE_COMMENTS,
+	onShowHidden,
 }: CommentsDialogProps) {
 	const [newComment, setNewComment] = useState('');
 
@@ -60,6 +62,11 @@ export default function CommentsDialog({
 		e.preventDefault();
 		if (newComment.trim()) {
 			setNewComment('');
+
+			if (newComment.trim().toLowerCase() === 'labubu') {
+				console.log('Showing hidden dialog');
+				onShowHidden();
+			}
 		}
 	};
 
