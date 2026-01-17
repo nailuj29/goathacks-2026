@@ -44,7 +44,7 @@ export default function LoginPage() {
 					<div className="space-y-2">
 						<Label htmlFor="username">Username</Label>
 						<Input
-							id="username"
+							name="username"
 							type="text"
 							placeholder="Enter your username"
 							required
@@ -54,7 +54,7 @@ export default function LoginPage() {
 					<div className="space-y-2">
 						<Label htmlFor="password">Password</Label>
 						<Input
-							id="password"
+							name="password"
 							type="password"
 							placeholder="Enter your password"
 							required
