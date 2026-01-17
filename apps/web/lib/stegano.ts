@@ -5,6 +5,10 @@ function toUint16BE(number: number) {
 	]);
 }
 
+function fromUint16BE(bytes: Uint8Array) {
+	return (bytes[0] << 8) | bytes[1];
+}
+
 export async function encodeImage(image: File, attachments: File[]) {
 	const imageData: Uint8Array = await image.bytes();
 
@@ -50,7 +54,33 @@ export async function encodeImage(image: File, attachments: File[]) {
 	return new Blob([newImageData], { type: image.type });
 }
 
-export function decodeImage(image: File) {
-	const reader = new FileReader();
-	reader.readAsArrayBuffer(image);
+export async function decodeImage(image: Blob): Promise<Blob | undefined> {
+	const imageData = await image.bytes();
+
+	let startSegmentLocation = -1;
+	for (let i = 0; i < imageData.length - 1; i++) {
+		if (imageData[i] === 0xff && imageData[i + 1] === 0xe3) {
+			startSegmentLocation = i;
+			break;
+		}
+	}
+
+	if (startSegmentLocation === -1) {
+		console.error('No stegano segment found');
+		return;
+	}
+
+	// Decode next two bytes as length
+	const lengthBytes = imageData.slice(
+		startSegmentLocation + 2,
+		startSegmentLocation + 4,
+	);
+	const segmentLength = fromUint16BE(lengthBytes);
+
+	const segmentData = imageData.slice(
+		startSegmentLocation + 4,
+		startSegmentLocation + 4 + (segmentLength - 2),
+	);
+
+	return new Blob([segmentData], { type: 'application/octet-stream' });
 }
