@@ -11,7 +11,9 @@
 	"license": "MIT",
 	"packageManager": "pnpm@10.21.0",
 	"devDependencies": {
-		"nx": "22.3.3"
+		"nx": "22.3.3",
+		"prettier": "^3.8.0",
+		"prettier-plugin-css-order": "^2.2.0"
 	},
 	"nx": {}
 }
