@@ -1,10 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { on } from 'events';
 import { CircleUser, HomeIcon, PlusIcon } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
-import router from 'next/router';
 import { useState, createContext } from 'react';
 
 export const SModeContext = createContext(false);
