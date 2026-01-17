@@ -11,8 +11,9 @@ export function useLogin() {
 			const response = api.post('/users/login', credentials);
 			return response;
 		},
-		onSuccess: () => {
+		onSuccess: (response) => {
 			queryClient.invalidateQueries({ queryKey: ['me'] });
+			localStorage.setItem('authToken', response.data.token);
 			router.push('/home');
 		},
 	}).mutateAsync;
