@@ -1,3 +1,5 @@
-export default function Home() {
-  return <div>hrleo</div>;
+import { redirect } from "next/navigation";
+
+export default function Index() {
+  redirect("/home");
 }
