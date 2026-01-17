@@ -1,8 +1,8 @@
 export default function AuthLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  console.log("do some auth checks idk");
-  return <>{children}</>;
+	console.log('do some auth checks idk');
+	return <>{children}</>;
 }
