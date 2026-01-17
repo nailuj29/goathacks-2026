@@ -3,10 +3,11 @@ import { DatabaseModule } from 'src/database/database.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { usersProviders } from './users.provider';
+import { JwtService } from './jwt.service';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [UsersController],
-  providers: [UsersService, ...usersProviders],
+  providers: [UsersService, JwtService, ...usersProviders],
 })
 export class UsersModule {}

@@ -7,15 +7,16 @@ import {
 import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
 import bcrypt from 'node_modules/bcryptjs';
-import { sign } from 'jsonwebtoken';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtService } from 'src/users/jwt.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject('USERS_MODEL')
     private userModel: Model<User>,
+    private jwtService: JwtService,
   ) {}
 
   async create({
@@ -32,12 +33,7 @@ export class UsersService {
     await createdUser.save();
 
     return {
-      token: sign(
-        {
-          id: createdUser._id,
-        },
-        process.env['JWT_SEC']!,
-      ),
+      token: this.jwtService.mint(createdUser.id),
     };
   }
 
@@ -57,12 +53,7 @@ export class UsersService {
 
     if (await bcrypt.compare(password, user[0].hashedPass)) {
       return {
-        token: sign(
-          {
-            id: user[0]._id,
-          },
-          process.env['JWT_SEC']!,
-        ),
+        token: this.jwtService.mint(user[0].id),
       };
     } else {
       throw new ForbiddenException();
