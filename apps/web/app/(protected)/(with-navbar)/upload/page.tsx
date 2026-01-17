@@ -1,12 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SModeContext } from '../layout';
 
 export default function UploadPage() {
 	const [isLoading, setIsLoading] = useState(false);
+	const sMode = useContext(SModeContext);
+
+	console.log(sMode);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -34,6 +38,20 @@ export default function UploadPage() {
 						required
 					/>
 				</div>
+
+				{sMode && (
+					<div className="space-y-2">
+						<Label htmlFor="hidden-message">Hidden Message</Label>
+						<Input id="hidden-message" type="text" placeholder="..." required />
+					</div>
+				)}
+
+				{sMode && (
+					<div className="space-y-2">
+						<Label htmlFor="key">Key</Label>
+						<Input id="key" type="text" placeholder="..." required />
+					</div>
+				)}
 
 				<Button type="submit" className="w-full" disabled={isLoading}>
 					{isLoading ? 'Uploading...' : 'Upload'}
