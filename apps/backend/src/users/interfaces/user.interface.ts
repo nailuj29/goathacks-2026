@@ -1,0 +1,5 @@
+export interface User extends Document {
+  readonly username: string;
+  readonly name: string;
+  readonly hashedPass: string;
+}
