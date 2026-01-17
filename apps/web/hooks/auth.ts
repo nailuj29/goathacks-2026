@@ -38,10 +38,13 @@ export function useAuth() {
 		queryFn: async () => {
 			return api.get('/users/me').then((res) => res.data);
 		},
+		retry: false, // Don't retry on auth failures
+		retryOnMount: false,
+		refetchOnWindowFocus: false,
 	});
 
 	const isLoading = currentUser.isLoading;
-	const isAuthenticated = currentUser?.data != null;
+	const isAuthenticated = !currentUser.isError && currentUser?.data != null;
 	const user = currentUser.data;
 
 	return {
