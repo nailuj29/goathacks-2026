@@ -13,6 +13,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Register the user' })
   @ApiResponse({ status: 200, description: 'User registered successfully' })
+  @ApiResponse({ status: 409, description: 'User already exists' })
   @Post('register')
   async register(@Body() registerUserDto: RegisterUserDto) {
     return await this.usersService.create(registerUserDto);

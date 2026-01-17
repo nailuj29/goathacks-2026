@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Inject,
   Injectable,
@@ -24,6 +25,16 @@ export class UsersService {
     name,
     password,
   }: RegisterUserDto): Promise<{ token: string }> {
+    const user = await this.userModel
+      .find({
+        username,
+      })
+      .exec();
+
+    if (user.length > 0) {
+      throw new ConflictException();
+    }
+
     const hashedPass = await bcrypt.hash(password, 10);
     const createdUser = new this.userModel({
       username,
