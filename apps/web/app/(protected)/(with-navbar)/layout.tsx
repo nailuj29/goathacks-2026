@@ -1,7 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { CircleUser, HomeIcon, PlusIcon } from 'lucide-react';
+import { useLogout } from '@/hooks/auth';
+import { CircleUser, HomeIcon, PlusIcon, LogOutIcon } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, createContext } from 'react';
 
@@ -16,6 +17,7 @@ export default function NavbarLayout({
 	const pathname = usePathname();
 	const [startHoldTime, setStartHoldTime] = useState<number | null>(null);
 	const [sMode, setSMode] = useState(false);
+	const logout = useLogout();
 
 	const isActive = (path: string) => pathname === path;
 
@@ -62,6 +64,15 @@ export default function NavbarLayout({
 						variant={isActive('/profile') ? 'default' : 'outline'}
 					>
 						<CircleUser />
+					</Button>
+					<Button
+						size="icon-lg"
+						onClick={async () => {
+							await logout();
+						}}
+						variant="ghost"
+					>
+						<LogOutIcon />
 					</Button>
 				</div>
 			</div>

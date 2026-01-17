@@ -1,11 +1,10 @@
 'use client';
 
-import { Spinner } from '@/components/ui/spinner';
 import { useAuth } from '@/hooks/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-export default function AuthLayout({
+export default function NoAuthLayout({
 	children,
 }: {
 	children: React.ReactNode;
@@ -14,20 +13,12 @@ export default function AuthLayout({
 	const router = useRouter();
 
 	useEffect(() => {
-		if (!isAuthenticated && !isLoading) {
-			router.push('/login');
+		if (isAuthenticated && !isLoading) {
+			router.push('/home');
 		}
 	}, [isAuthenticated, isLoading, router]);
 
-	if (isLoading) {
-		return (
-			<div className="flex items-center justify-center min-h-screen bg-white">
-				<Spinner />
-			</div>
-		);
-	}
-
-	if (!isAuthenticated && !isLoading) {
+	if (isAuthenticated && !isLoading) {
 		return null;
 	}
 
