@@ -12,19 +12,4 @@ api.interceptors.request.use((config) => {
 	return config;
 });
 
-api.interceptors.response.use(
-	(response) => response,
-	(error) => {
-		if (
-			error.response &&
-			(error.response.status === 401 || error.response.status === 403)
-		) {
-			localStorage.removeItem('authToken');
-			if (!window.location.href.includes('/login'))
-				window.location.href = '/login';
-		}
-		return Promise.reject(error);
-	},
-);
-
 export default api;
