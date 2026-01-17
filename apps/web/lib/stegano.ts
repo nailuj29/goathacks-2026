@@ -9,18 +9,12 @@ function fromUint16BE(bytes: Uint8Array) {
 	return (bytes[0] << 8) | bytes[1];
 }
 
-export async function encodeImage(image: File, attachments: File[]) {
+export async function encodeImage(image: File, data: Uint8Array) {
 	const imageData: Uint8Array = await image.bytes();
-
-	if (!attachments || attachments.length === 0) {
-		console.error('No attachments provided for encoding');
-		return;
-	}
 
 	// Uses APP3 marker
 	const appSegmentHeader = new Uint8Array([0xff, 0xe3]);
-	const appSegmentData = await attachments[0].bytes();
-	const appSegmentLength = appSegmentData.length + 2; // length includes the 2 length bytes
+	const appSegmentLength = data.length + 2; // length includes the 2 length bytes
 	const appSegmentLengthBytes = toUint16BE(appSegmentLength);
 
 	let startScanLocation = -1;
@@ -48,13 +42,15 @@ export async function encodeImage(image: File, attachments: File[]) {
 	newImageData.set(leftImageData, 0);
 	newImageData.set(appSegmentHeader, leftImageData.length);
 	newImageData.set(appSegmentLengthBytes, leftImageData.length + 2);
-	newImageData.set(appSegmentData, leftImageData.length + 4);
+	newImageData.set(data, leftImageData.length + 4);
 	newImageData.set(rightImageData, leftImageData.length + 2 + appSegmentLength);
 
 	return new Blob([newImageData], { type: image.type });
 }
 
-export async function decodeImage(image: Blob): Promise<Blob | undefined> {
+export async function decodeImage(
+	image: Blob,
+): Promise<Uint8Array | undefined> {
 	const imageData = await image.bytes();
 
 	let startSegmentLocation = -1;
@@ -82,5 +78,5 @@ export async function decodeImage(image: Blob): Promise<Blob | undefined> {
 		startSegmentLocation + 4 + (segmentLength - 2),
 	);
 
-	return new Blob([segmentData], { type: 'application/octet-stream' });
+	return segmentData;
 }
