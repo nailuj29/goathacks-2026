@@ -44,28 +44,24 @@ export default function Post({
 							<p className="text-xs text-gray-500">{userHandle}</p>
 						</div>
 					</div>
-					<Button variant="outline" size="sm">
-						Follow
-					</Button>
 				</div>
 
 				<div className="relative w-full aspect-square">
 					<Image src={imageUrl} alt="Post" fill className="object-cover" />
 				</div>
 
-				<div className="p-4 flex items-start justify-between">
-					<div className="flex-1">
-						<p className="text-sm">
-							<span className="font-semibold">{username}</span> {caption}
-						</p>
-					</div>
+				<div className="p-4 flex flex-row flex-nowrap items-center justify-between gap-2">
+					<p className="text-sm flex-1 min-w-0">
+						<span className="font-semibold">{username}</span> {caption}
+					</p>
+
 					<Button
 						variant="ghost"
 						size="icon"
 						onClick={() => {
 							setCommentsOpen(true);
 						}}
-						className="ml-2"
+						className="shrink-0"
 					>
 						<MessageCircle className="w-5 h-5" />
 					</Button>
