@@ -15,7 +15,7 @@ import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { ApiUser } from 'src/users/interfaces/api-user.interface';
-import type { PublishPostDto } from './dto/publish-post.dto';
+import { PublishPostDto } from './dto/publish-post.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { writeFile } from 'node:fs/promises';
 import cuid2 from '@paralleldrive/cuid2';
