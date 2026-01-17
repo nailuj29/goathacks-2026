@@ -3,18 +3,33 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useLogin } from '@/hooks/auth';
+import { AxiosError } from 'axios';
 import { useState } from 'react';
 
 export default function LoginPage() {
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const login = useLogin();
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setIsLoading(true);
-		// Simulate API call
-		setTimeout(() => {
-			setIsLoading(false);
-		}, 2000);
+
+		const formData = new FormData(e.currentTarget);
+		const username = formData.get('username') as string;
+		const password = formData.get('password') as string;
+
+		try {
+			await login({ username, password });
+			setError(null);
+		} catch (err) {
+			if (err instanceof AxiosError) {
+				setError(err.response?.data?.message || 'Unknown error');
+			}
+		}
+
+		setIsLoading(false);
 	};
 
 	return (
@@ -45,6 +60,10 @@ export default function LoginPage() {
 							required
 						/>
 					</div>
+
+					{error && (
+						<p className="text-red-500 text-sm">Login failed: {error}</p>
+					)}
 
 					<Button type="submit" className="w-full mt-6" disabled={isLoading}>
 						{isLoading ? 'Signing in...' : 'Sign in'}
