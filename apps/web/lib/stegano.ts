@@ -48,7 +48,7 @@ async function deriveKeyFromPassword(password: string): Promise<CryptoKey> {
 	);
 }
 
-export async function createPayload(
+async function createPayload(
 	attachments: File[],
 	key: string,
 ): Promise<Uint8Array> {
@@ -86,7 +86,7 @@ export async function createPayload(
 	return result;
 }
 
-export async function decryptPayload(
+async function decryptPayload(
 	data: Uint8Array,
 	key: string,
 ): Promise<PayloadData | null> {
@@ -114,7 +114,7 @@ export async function decryptPayload(
 	}
 }
 
-export async function encodeImage(image: File, data: Uint8Array) {
+async function encodeImage(image: File, data: Uint8Array) {
 	const imageData: Uint8Array = await image.bytes();
 
 	// Uses APP3 marker
@@ -153,9 +153,7 @@ export async function encodeImage(image: File, data: Uint8Array) {
 	return new Blob([newImageData], { type: image.type });
 }
 
-export async function decodeImage(
-	image: Blob,
-): Promise<Uint8Array | undefined> {
+async function decodeImage(image: Blob): Promise<Uint8Array | undefined> {
 	const imageData = await image.bytes();
 
 	let startSegmentLocation = -1;
@@ -184,4 +182,33 @@ export async function decodeImage(
 	);
 
 	return segmentData;
+}
+
+export async function createStegImage(
+	image: File,
+	attachments: File[],
+	key: string,
+) {
+	const payload = await createPayload(attachments, key);
+	return await encodeImage(image, payload);
+}
+
+export async function decryptStegImage(
+	image: Blob,
+	key: string,
+): Promise<File[] | null> {
+	const decoded = await decodeImage(image);
+	if (!decoded) return null;
+	const decrypted = await decryptPayload(decoded, key);
+	if (!decrypted) return null;
+
+	const files: File[] = [];
+
+	for (const file of decrypted.files) {
+		files.push(
+			new File([new Uint8Array(file.bytes)], file.name, { type: file.type }),
+		);
+	}
+
+	return files;
 }
