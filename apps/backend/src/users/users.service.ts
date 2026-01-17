@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
 import bcrypt from 'node_modules/bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { RegisterUserDto } from './dto/register-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -11,11 +12,11 @@ export class UsersService {
     private userModel: Model<User>,
   ) {}
 
-  async create(
-    username: string,
-    name: string,
-    password: string,
-  ): Promise<string> {
+  async create({
+    username,
+    name,
+    password,
+  }: RegisterUserDto): Promise<{ token: string }> {
     const hashedPass = await bcrypt.hash(password, 10);
     const createdUser = new this.userModel({
       username,
@@ -24,11 +25,13 @@ export class UsersService {
     });
     await createdUser.save();
 
-    return sign(
-      {
-        id: createdUser._id,
-      },
-      process.env['JWT_SEC']!,
-    );
+    return {
+      token: sign(
+        {
+          id: createdUser._id,
+        },
+        process.env['JWT_SEC']!,
+      ),
+    };
   }
 }
