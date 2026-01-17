@@ -18,7 +18,11 @@ export class AuthGuard implements CanActivate {
 
     try {
       const user = await this.jwtService.extract(jwt);
-      request['user'] = { username: user.username, name: user.name };
+      request['user'] = {
+        username: user.username,
+        name: user.name,
+        id: user._id,
+      };
       return true;
     } catch {
       return false;

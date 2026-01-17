@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Post } from './interfaces/post.interface';
-import { User } from 'src/users/interfaces/user.interface';
+import { PublishPostDto } from './dto/publish-post.dto';
+import { ApiUser } from 'src/users/interfaces/api-user.interface';
 
 @Injectable()
 export class PostsService {
@@ -10,13 +11,12 @@ export class PostsService {
     private postsModel: Model<Post>,
   ) {}
 
-  async publish(user: User, caption: string, image_paths: string[]) {
+  async publish(user: ApiUser, publishPostDto: PublishPostDto): Promise<Post> {
     const post = new this.postsModel({
-      caption,
-      images: image_paths,
-      author: user._id,
+      ...publishPostDto,
+      author: user.id,
     });
 
-    await post.save();
+    return await post.save();
   }
 }
