@@ -2,6 +2,19 @@ import api from '@/lib/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
+export function useLogout() {
+	const queryClient = useQueryClient();
+	const router = useRouter();
+
+	return useMutation({
+		mutationFn: async () => {
+			localStorage.removeItem('authToken');
+			queryClient.invalidateQueries({ queryKey: ['me'] });
+			router.push('/login');
+		},
+	}).mutateAsync;
+}
+
 export function useLogin() {
 	const queryClient = useQueryClient();
 	const router = useRouter();
