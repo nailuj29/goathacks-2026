@@ -15,5 +15,8 @@
 		"prettier": "^3.8.0",
 		"prettier-plugin-css-order": "^2.2.0"
 	},
-	"nx": {}
+	"nx": {},
+	"dependencies": {
+		"lucide-react": "^0.562.0"
+	}
 }
