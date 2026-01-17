@@ -1,8 +1,8 @@
 {
-  "plugins": ["prettier-plugin-css-order"],
-  "useTabs": true,
-  "singleQuote": true,
-  "semi": true,
-  "printWidth": 80,
-  "proseWrap": "always"
+	"plugins": ["prettier-plugin-css-order"],
+	"useTabs": true,
+	"singleQuote": true,
+	"semi": true,
+	"printWidth": 80,
+	"proseWrap": "always"
 }
