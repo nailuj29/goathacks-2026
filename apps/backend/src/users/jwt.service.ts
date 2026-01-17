@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
 import { Model } from 'mongoose';
-import { User } from 'src/users/interfaces/user.interface';
+import type { User } from 'src/users/interfaces/user.interface';
 
 @Injectable()
 export class JwtService {

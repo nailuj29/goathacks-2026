@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
+import { User } from 'src/users/interfaces/user.interface';
 import { JwtService } from 'src/users/jwt.service';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class AuthGuard implements CanActivate {
     const jwt = parts[1];
 
     try {
-      const user = await this.jwtService.extract(jwt);
+      const user: User = await this.jwtService.extract(jwt);
       request['user'] = {
         username: user.username,
         name: user.name,
