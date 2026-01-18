@@ -13,8 +13,8 @@ import Comment from './comment';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
 import { decryptStegImage } from '@/lib/stegano';
-import { useRouter } from 'next/dist/client/components/navigation';
 import { APIPost } from '@/lib/backendtypes';
+import Link from 'next/link';
 
 interface CommentsDialogProps {
 	open: boolean;
@@ -30,8 +30,6 @@ export default function CommentsDialog({
 }: CommentsDialogProps) {
 	const [newComment, setNewComment] = useState('');
 	const [hiddenFiles, setHiddenFiles] = useState<File[]>([]);
-
-	const router = useRouter();
 	const queryClient = useQueryClient();
 
 	const commentMutation = useMutation({
@@ -100,19 +98,16 @@ export default function CommentsDialog({
 				{hiddenFiles.length > 0 && (
 					<div className="flex gap-2 flex-wrap">
 						<p className="w-full font-semibold">Hidden Files:</p>
-						{hiddenFiles.map((file, index) => (
-							<Button
-								key={index}
-								size="sm"
-								variant="outline"
-								onClick={() => {
-									const url = URL.createObjectURL(file);
-									router.push(url);
-								}}
-							>
-								{file.name}
-							</Button>
-						))}
+						{hiddenFiles.map((file, index) => {
+							const url = URL.createObjectURL(file);
+							return (
+								<Button key={index} size="sm" variant="outline">
+									<Link href={url} target="_blank">
+										{file.name}
+									</Link>
+								</Button>
+							);
+						})}
 					</div>
 				)}
 
