@@ -9,11 +9,14 @@ import { createJunkImage, createStegImage } from '@/lib/stegano';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
 import { APIUploadPost } from '@/lib/backendtypes';
+import { PlusIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function UploadPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const sMode = useContext(SModeContext);
 	const queryClient = useQueryClient();
+	const router = useRouter();
 
 	console.log(sMode);
 
@@ -82,11 +85,16 @@ export default function UploadPage() {
 		});
 
 		setIsLoading(false);
+
+		router.push('/home');
 	};
 
 	return (
 		<div className="p-6 max-w-md mx-auto">
-			<h1 className="text-2xl font-bold mb-6">Create Post</h1>
+			<div className="flex flex-col items-center">
+				<PlusIcon size={64} />
+				<h1 className="text-2xl font-bold mb-6">Create Post</h1>
+			</div>
 
 			<form onSubmit={handleSubmit} className="space-y-6">
 				<div className="space-y-2">
