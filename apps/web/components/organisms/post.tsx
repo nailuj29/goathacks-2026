@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import CommentsDialog from './commentsDialog';
-import HiddenDialog from './hiddenDialog';
 import { useState } from 'react';
 import { APIPost } from '@/lib/backendtypes';
 
@@ -15,7 +14,6 @@ interface PostProps {
 
 export default function Post({ post }: PostProps) {
 	const [commentsOpen, setCommentsOpen] = useState(false);
-	const [showHiddenDialog, setShowHiddenDialog] = useState(false);
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
 	const imageCount = post.images.length;
@@ -129,13 +127,8 @@ export default function Post({ post }: PostProps) {
 				onOpenChange={setCommentsOpen}
 				onShowHidden={() => {
 					setCommentsOpen(false);
-					setShowHiddenDialog(true);
 				}}
 				post={post}
-			/>
-			<HiddenDialog
-				open={showHiddenDialog}
-				onOpenChange={setShowHiddenDialog}
 			/>
 		</>
 	);
