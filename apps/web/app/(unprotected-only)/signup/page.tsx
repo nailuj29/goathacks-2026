@@ -48,7 +48,7 @@ export default function SignUpPage() {
 		<div className="flex items-center justify-center min-h-screen bg-white">
 			<div className="w-full max-w-sm px-6">
 				<div className="text-center mb-8">
-					<h1 className="text-3xl font-bold">Stenogram</h1>
+					<h1 className="text-3xl font-bold">Stegnogram</h1>
 					<p className="text-gray-500 text-sm mt-2">Create a new account</p>
 				</div>
 
