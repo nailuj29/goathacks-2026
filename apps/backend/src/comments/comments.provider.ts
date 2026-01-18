@@ -5,7 +5,7 @@ export const commentsProviders = [
   {
     provide: 'COMMENTS_MODEL',
     useFactory: (connection: Connection) =>
-      connection.model('Comments', CommentSchema),
+      connection.model('Comment', CommentSchema),
     inject: ['DATABASE_CONNECTION'],
   },
 ];
