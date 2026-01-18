@@ -12,7 +12,7 @@ function fromUint16BE(bytes: Uint8Array) {
 interface PayloadFile {
 	name: string;
 	type: string;
-	bytes: Uint8Array;
+	data: string;
 }
 
 interface PayloadData {
@@ -55,11 +55,13 @@ async function createPayload(
 	const payloadData: PayloadData = { files: [] };
 
 	for (const file of attachments) {
-		const fileBytes = await file.bytes();
+		const fileBytes: Uint8Array<ArrayBuffer> = await file.bytes();
+		const base64Data = Buffer.from(fileBytes).toString('base64');
+
 		payloadData.files.push({
 			name: file.name,
 			type: file.type,
-			bytes: fileBytes,
+			data: base64Data,
 		});
 	}
 
@@ -204,8 +206,10 @@ export async function decryptStegImage(
 	const files: File[] = [];
 
 	for (const file of decrypted.files) {
+		const fileBytes = Buffer.from(file.data, 'base64');
+
 		files.push(
-			new File([new Uint8Array(Object.values(file.bytes))], file.name, {
+			new File([fileBytes], file.name, {
 				type: file.type,
 			}),
 		);
