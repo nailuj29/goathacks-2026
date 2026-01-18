@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Model, Schema } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Post } from './interfaces/post.interface';
 import { PublishPostDto } from './dto/publish-post.dto';
 import { ApiUser } from 'src/users/interfaces/api-user.interface';
@@ -20,7 +20,7 @@ export class PostsService {
     return await post.save();
   }
 
-  async getBy(userId: Schema.Types.ObjectId): Promise<Post[]> {
+  async getBy(userId: Types.ObjectId): Promise<Post[]> {
     const posts = await this.postsModel
       .find({ author: userId })
       .populate('author')
