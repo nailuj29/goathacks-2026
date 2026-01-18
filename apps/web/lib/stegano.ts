@@ -205,7 +205,9 @@ export async function decryptStegImage(
 
 	for (const file of decrypted.files) {
 		files.push(
-			new File([new Uint8Array(file.bytes)], file.name, { type: file.type }),
+			new File([new Uint8Array(Object.values(file.bytes))], file.name, {
+				type: file.type,
+			}),
 		);
 	}
 
