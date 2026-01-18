@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: 'Stenogram',
+	title: 'Stegogram',
 	description: 'Nothing covert to see here!',
 };
 
