@@ -109,7 +109,7 @@ async function decryptPayload(
 		const decryptedStr = decoder.decode(decrypted);
 		return JSON.parse(decryptedStr) as PayloadData;
 	} catch (e) {
-		console.error('Decryption failed', e);
+		console.info('Decryption failed', e);
 		return null;
 	}
 }

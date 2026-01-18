@@ -130,8 +130,7 @@ export default function Post({ post }: PostProps) {
 					setCommentsOpen(false);
 					setShowHiddenDialog(true);
 				}}
-				comments={post.comments}
-				postId={post._id}
+				post={post}
 			/>
 			<HiddenDialog
 				open={showHiddenDialog}
