@@ -60,16 +60,14 @@ export default function CommentsDialog({
 					type: 'image/jpeg',
 				});
 
-				decryptStegImage(file, newComment).then((hiddenMessage) => {
-					if (hiddenMessage) {
-						console.log('Extracted hidden message:', hiddenMessage);
-						setHiddenFiles((prev) => [...prev, ...hiddenMessage]);
-					} else {
-						console.log('No hidden message found in image:', imageUrl);
-					}
-				});
+				const imageFiles = await decryptStegImage(file, newComment);
 
-				return;
+				if (imageFiles) {
+					const existingNames = new Set(hiddenFiles.map((f) => f.name));
+					const newFiles = imageFiles.filter((f) => !existingNames.has(f.name));
+					setHiddenFiles((prev) => [...prev, ...newFiles]);
+					if (newFiles.length > 0) return;
+				}
 			} catch (error) {
 				console.error(
 					`Failed to extract hidden message from ${imageUrl}:`,
