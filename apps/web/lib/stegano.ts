@@ -211,3 +211,8 @@ export async function decryptStegImage(
 
 	return files;
 }
+
+export async function createJunkImage(image: File): Promise<File> {
+	const junkData = crypto.getRandomValues(new Uint8Array(256));
+	return await encodeImage(image, junkData);
+}

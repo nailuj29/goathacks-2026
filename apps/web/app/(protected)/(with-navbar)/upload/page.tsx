@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SModeContext } from '../layout';
-import { createStegImage, decryptStegImage } from '@/lib/stegano';
+import { createJunkImage, createStegImage } from '@/lib/stegano';
 
 export default function UploadPage() {
 	const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +25,8 @@ export default function UploadPage() {
 
 		if (sMode && hiddenMessage && key) {
 			image = await createStegImage(image, [hiddenMessage], key);
+		} else {
+			image = await createJunkImage(image);
 		}
 
 		setIsLoading(false);
