@@ -45,11 +45,13 @@ export default function CommentsDialog({
 
 	const handleAddComment = (e: React.FormEvent) => {
 		e.preventDefault();
-		commentMutation.mutate(newComment);
 
-		if (newComment.trim()) {
-			setNewComment('');
+		if (!newComment.trim()) {
+			return;
 		}
+
+		commentMutation.mutate(newComment);
+		setNewComment('');
 	};
 
 	return (
