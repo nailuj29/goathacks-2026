@@ -4,9 +4,13 @@ import { Button } from '@/components/ui/button';
 import { useLogout } from '@/hooks/auth';
 import { CircleUser, HomeIcon, PlusIcon, LogOutIcon } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useState, createContext } from 'react';
+import { useState, createContext, useEffect } from 'react';
 
 export const SModeContext = createContext(false);
+
+// Customizable button sequence: 'home', 'profile', 'upload' triggers sMode
+const UNLOCK_SEQUENCE = ['home', 'upload', 'home', 'upload', 'home', 'upload'];
+const SEQUENCE_TIMEOUT = 2000; // milliseconds
 
 export default function NavbarLayout({
 	children,
@@ -15,24 +19,43 @@ export default function NavbarLayout({
 }) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const [startHoldTime, setStartHoldTime] = useState<number | null>(null);
 	const [sMode, setSMode] = useState(false);
+	const [buttonSequence, setButtonSequence] = useState<string[]>([]);
 	const logout = useLogout();
 
-	const isActive = (path: string) => pathname === path;
+	// Reset sequence after timeout
+	useEffect(() => {
+		if (buttonSequence.length === 0) return;
 
-	const onMouseUp = () => {
-		if (startHoldTime !== null) {
-			const holdDuration = Date.now() - startHoldTime;
-			console.log('Hold duration:', holdDuration);
-			if (holdDuration > 1500) {
+		const timer = setTimeout(() => {
+			setButtonSequence([]);
+		}, SEQUENCE_TIMEOUT);
+
+		return () => clearTimeout(timer);
+	}, [buttonSequence]);
+
+	const handleButtonClick = (buttonId: string) => {
+		const newSequence = [...buttonSequence, buttonId];
+		const expectedButton = UNLOCK_SEQUENCE[newSequence.length - 1];
+
+		if (buttonId === expectedButton) {
+			if (newSequence.length === UNLOCK_SEQUENCE.length) {
+				// Sequence complete!
 				setSMode(true);
+				setButtonSequence([]);
 			} else {
+				// Sequence in progress
 				setSMode(false);
+				setButtonSequence(newSequence);
 			}
-			setStartHoldTime(null);
+		} else {
+			// Wrong button, reset sequence
+			setSMode(false);
+			setButtonSequence([]);
 		}
 	};
+
+	const isActive = (path: string) => pathname === path;
 
 	return (
 		<SModeContext.Provider value={sMode}>
@@ -41,17 +64,18 @@ export default function NavbarLayout({
 				<div className="border-t py-4 px-4 flex gap-2 justify-center">
 					<Button
 						size="icon-lg"
-						onClick={() => router.push('/home')}
+						onClick={() => {
+							handleButtonClick('home');
+							router.push('/home');
+						}}
 						variant={isActive('/home') ? 'default' : 'outline'}
 					>
 						<HomeIcon />
 					</Button>
 					<Button
 						size="icon-lg"
-						onMouseDown={() => setStartHoldTime(Date.now())}
-						onMouseUp={onMouseUp}
 						onClick={() => {
-							localStorage.setItem('sMode', 'false');
+							handleButtonClick('upload');
 							router.push('/upload');
 						}}
 						variant={isActive('/upload') ? 'default' : 'outline'}
@@ -60,7 +84,10 @@ export default function NavbarLayout({
 					</Button>
 					<Button
 						size="icon-lg"
-						onClick={() => router.push('/profile')}
+						onClick={() => {
+							handleButtonClick('profile');
+							router.push('/profile');
+						}}
 						variant={isActive('/profile') ? 'default' : 'outline'}
 					>
 						<CircleUser />
@@ -68,6 +95,7 @@ export default function NavbarLayout({
 					<Button
 						size="icon-lg"
 						onClick={async () => {
+							handleButtonClick('logout');
 							await logout();
 						}}
 						variant="ghost"
