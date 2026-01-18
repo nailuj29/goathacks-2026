@@ -23,14 +23,23 @@ export class PostsService {
   async getBy(userId: Types.ObjectId): Promise<Post[]> {
     const posts = await this.postsModel
       .find({ author: userId })
-      .populate('author')
+      .populate({
+        path: 'author',
+        select: 'name username',
+      })
       .exec();
 
     return posts;
   }
 
   async getAll(): Promise<Post[]> {
-    const posts = await this.postsModel.find().populate('author').exec();
+    const posts = await this.postsModel
+      .find()
+      .populate({
+        path: 'author',
+        select: 'name username',
+      })
+      .exec();
 
     return posts;
   }
