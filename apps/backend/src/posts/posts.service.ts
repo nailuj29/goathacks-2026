@@ -40,6 +40,9 @@ export class PostsService {
         },
         select: 'text author',
       })
+      .sort({
+        createdAt: -1,
+      })
       .exec();
 
     return posts;
@@ -64,6 +67,9 @@ export class PostsService {
           select: 'name username _id',
         },
         select: 'text author',
+      })
+      .sort({
+        createdAt: -1,
       })
       .exec();
 
