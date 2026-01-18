@@ -10,63 +10,45 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Comment from './comment';
-
-interface CommentData {
-	username: string;
-	avatarUrl: string;
-	avatarFallback: string;
-	text: string;
-	timestamp: string;
-}
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import api from '@/lib/api';
 
 interface CommentsDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	onShowHidden: () => void;
-	comments?: CommentData[];
+	comments: APIComment[];
+	postId: string;
 }
-
-const SAMPLE_COMMENTS: CommentData[] = [
-	{
-		username: 'Sarah Chen',
-		avatarUrl: 'https://github.com/shadcn.png',
-		avatarFallback: 'SC',
-		text: 'Amazing view! 🔥',
-		timestamp: '2h ago',
-	},
-	{
-		username: 'Alex Rivera',
-		avatarUrl: 'https://github.com/shadcn.png',
-		avatarFallback: 'AR',
-		text: 'Where was this taken?',
-		timestamp: '1h ago',
-	},
-	{
-		username: 'Jordan Lee',
-		avatarUrl: 'https://github.com/shadcn.png',
-		avatarFallback: 'JL',
-		text: 'Absolutely stunning! Adding this to my bucket list 📍',
-		timestamp: '30m ago',
-	},
-];
 
 export default function CommentsDialog({
 	open,
 	onOpenChange,
-	comments = SAMPLE_COMMENTS,
-	onShowHidden,
+	postId,
+	comments,
 }: CommentsDialogProps) {
 	const [newComment, setNewComment] = useState('');
 
+	const queryClient = useQueryClient();
+
+	const commentMutation = useMutation({
+		mutationFn: async (commentText: string) => {
+			const response = await api.post(`/comments/${postId}/add`, {
+				text: commentText,
+			});
+			return response.data;
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['feed-posts'] });
+		},
+	});
+
 	const handleAddComment = (e: React.FormEvent) => {
 		e.preventDefault();
+		commentMutation.mutate(newComment);
+
 		if (newComment.trim()) {
 			setNewComment('');
-
-			if (newComment.trim().toLowerCase() === 'labubu') {
-				console.log('Showing hidden dialog');
-				onShowHidden();
-			}
 		}
 	};
 
@@ -78,9 +60,13 @@ export default function CommentsDialog({
 				</DialogHeader>
 
 				<div className="max-h-96 overflow-y-auto space-y-1 py-4 border-t border-b">
-					{comments.map((comment, index) => (
-						<Comment key={index} {...comment} />
-					))}
+					{comments ? (
+						comments.map((comment, index) => (
+							<Comment key={index} comment={comment} />
+						))
+					) : (
+						<p className="text-gray-500">No comments yet.</p>
+					)}
 				</div>
 
 				<form onSubmit={handleAddComment} className="flex gap-2 pt-4">
