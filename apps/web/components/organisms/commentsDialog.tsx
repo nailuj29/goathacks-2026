@@ -60,7 +60,7 @@ export default function CommentsDialog({
 				</DialogHeader>
 
 				<div className="max-h-96 overflow-y-auto space-y-1 py-4 border-t border-b">
-					{comments ? (
+					{comments && comments.length > 0 ? (
 						comments.map((comment, index) => (
 							<Comment key={index} comment={comment} />
 						))
