@@ -10,6 +10,7 @@ interface APIUploadPost {
 }
 
 interface APIUser {
+	_id: string;
 	username: string;
 	name: string;
 }

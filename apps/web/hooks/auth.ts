@@ -35,7 +35,7 @@ export function useLogin() {
 export function useAuth() {
 	const currentUser = useQuery({
 		queryKey: ['me'],
-		queryFn: async () => {
+		queryFn: async (): Promise<APIUser> => {
 			return api.get('/users/me').then((res) => res.data);
 		},
 		retry: false, // Don't retry on auth failures
