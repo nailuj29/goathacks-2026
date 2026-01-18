@@ -61,37 +61,40 @@ export default function NavbarLayout({
 		<SModeContext.Provider value={sMode}>
 			<div className="flex flex-col h-screen">
 				<div className="flex-1 overflow-auto">{children}</div>
-				<div className="border-t py-4 px-4 flex gap-2 justify-center">
-					<Button
-						size="icon-lg"
-						onClick={() => {
-							handleButtonClick('home');
-							router.push('/home');
-						}}
-						variant={isActive('/home') ? 'default' : 'outline'}
-					>
-						<HomeIcon />
-					</Button>
-					<Button
-						size="icon-lg"
-						onClick={() => {
-							handleButtonClick('upload');
-							router.push('/upload');
-						}}
-						variant={isActive('/upload') ? 'default' : 'outline'}
-					>
-						<PlusIcon />
-					</Button>
-					<Button
-						size="icon-lg"
-						onClick={() => {
-							handleButtonClick('profile');
-							router.push('/profile');
-						}}
-						variant={isActive('/profile') ? 'default' : 'outline'}
-					>
-						<CircleUser />
-					</Button>
+				<div className="border-t py-4 px-4 flex gap-2">
+					<div className="w-10"></div>
+					<div className="flex-1 flex gap-2 justify-center">
+						<Button
+							size="icon-lg"
+							onClick={() => {
+								handleButtonClick('home');
+								router.push('/home');
+							}}
+							variant={isActive('/home') ? 'default' : 'outline'}
+						>
+							<HomeIcon />
+						</Button>
+						<Button
+							size="icon-lg"
+							onClick={() => {
+								handleButtonClick('upload');
+								router.push('/upload');
+							}}
+							variant={isActive('/upload') ? 'default' : 'outline'}
+						>
+							<PlusIcon />
+						</Button>
+						<Button
+							size="icon-lg"
+							onClick={() => {
+								handleButtonClick('profile');
+								router.push('/profile');
+							}}
+							variant={isActive('/profile') ? 'default' : 'outline'}
+						>
+							<CircleUser />
+						</Button>
+					</div>
 					<Button
 						size="icon-lg"
 						onClick={async () => {
