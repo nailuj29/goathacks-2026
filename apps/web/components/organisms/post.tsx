@@ -7,6 +7,7 @@ import { MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import CommentsDialog from './commentsDialog';
 import HiddenDialog from './hiddenDialog';
 import { useState } from 'react';
+import { APIPost } from '@/lib/backendtypes';
 
 interface PostProps {
 	post: APIPost;

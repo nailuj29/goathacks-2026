@@ -1,3 +1,5 @@
+import { APIComment } from '@/lib/backendtypes';
+
 export default function Comment({ comment }: { comment: APIComment }) {
 	return (
 		<div className="flex gap-3 py-3">

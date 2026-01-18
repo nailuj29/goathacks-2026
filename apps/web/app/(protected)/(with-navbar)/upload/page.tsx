@@ -8,6 +8,7 @@ import { SModeContext } from '../layout';
 import { createJunkImage, createStegImage } from '@/lib/stegano';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
+import { APIUploadPost } from '@/lib/backendtypes';
 
 export default function UploadPage() {
 	const [isLoading, setIsLoading] = useState(false);

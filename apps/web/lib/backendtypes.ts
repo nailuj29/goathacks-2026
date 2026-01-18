@@ -1,4 +1,4 @@
-interface APIPost {
+export interface APIPost {
 	_id: string;
 	caption: string;
 	images: string[];
@@ -6,18 +6,18 @@ interface APIPost {
 	comments: APIComment[];
 }
 
-interface APIUploadPost {
+export interface APIUploadPost {
 	caption: string;
 	images: string[];
 }
 
-interface APIUser {
+export interface APIUser {
 	_id: string;
 	username: string;
 	name: string;
 }
 
-interface APIComment {
+export interface APIComment {
 	text: string;
 	author: APIUser;
 }

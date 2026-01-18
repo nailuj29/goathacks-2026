@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
 import { decryptStegImage } from '@/lib/stegano';
 import { useRouter } from 'next/dist/client/components/navigation';
+import { APIPost } from '@/lib/backendtypes';
 
 interface CommentsDialogProps {
 	open: boolean;

@@ -3,6 +3,7 @@
 import Post from '@/components/organisms/post';
 import { Spinner } from '@/components/ui/spinner';
 import api from '@/lib/api';
+import { APIPost } from '@/lib/backendtypes';
 import { useQuery } from '@tanstack/react-query';
 
 export default function HomePage() {
