@@ -1,7 +1,7 @@
-import { Document, ObjectId } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export interface Post extends Document {
   readonly caption: string;
   readonly images: string[];
-  readonly author: ObjectId;
+  readonly author: Types.ObjectId;
 }
