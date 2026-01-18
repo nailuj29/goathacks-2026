@@ -34,6 +34,6 @@ export class UsersController {
   @Get('me')
   @UseGuards(AuthGuard)
   info(@Req() req: Request & { user: ApiUser }) {
-    return { name: req.user.name, username: req.user.username };
+    return req.user;
   }
 }
