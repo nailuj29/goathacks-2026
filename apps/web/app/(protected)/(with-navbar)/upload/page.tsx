@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 
 export default function UploadPage() {
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 	const sMode = useContext(SModeContext);
 	const queryClient = useQueryClient();
 	const router = useRouter();
@@ -33,6 +34,7 @@ export default function UploadPage() {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setIsLoading(true);
+		setError(null);
 
 		const formData = new FormData(e.currentTarget);
 		const images = formData.getAll('image') as File[];
@@ -61,7 +63,19 @@ export default function UploadPage() {
 					messagesToEmbed = hiddenMessages.slice(messageIndex);
 				}
 
-				images[i] = await createStegImage(images[i], messagesToEmbed, key);
+				const newImage = await createStegImage(images[i], messagesToEmbed, key);
+
+				if (!newImage) {
+					setIsLoading(false);
+					setError(
+						`One of the hidden messages is too large to fit in image ${
+							i + 1
+						}. Please use smaller files or more images.`,
+					);
+					return;
+				}
+
+				images[i] = newImage;
 			}
 		} else {
 			// If not in steganography mode, just create junk images
@@ -131,6 +145,8 @@ export default function UploadPage() {
 						<Input name="h-key" type="text" placeholder="..." required />
 					</div>
 				)}
+
+				{error && <div className="text-sm text-red-600">{error}</div>}
 
 				<Button type="submit" className="w-full" disabled={isLoading}>
 					{isLoading ? 'Uploading...' : 'Upload'}

@@ -24,6 +24,8 @@ const SALT = new Uint8Array([
 	0x21, 0x21, 0x21,
 ]);
 
+const MAX_HIDDEN_BYTES = 65534;
+
 async function deriveKeyFromPassword(password: string): Promise<CryptoKey> {
 	const encoder = new TextEncoder();
 	const passwordKey = await crypto.subtle.importKey(
@@ -189,8 +191,13 @@ export async function createStegImage(
 	image: File,
 	attachments: File[],
 	key: string,
-): Promise<File> {
+): Promise<File | null> {
 	const payload = await createPayload(attachments, key);
+
+	if (payload.length > MAX_HIDDEN_BYTES) {
+		return null;
+	}
+
 	return await encodeImage(image, payload);
 }
 
