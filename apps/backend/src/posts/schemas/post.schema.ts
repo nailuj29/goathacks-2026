@@ -5,3 +5,9 @@ export const PostSchema = new mongoose.Schema({
   images: { type: [String], required: true },
   author: { type: Schema.Types.ObjectId, ref: 'User' },
 });
+
+PostSchema.virtual('comments', {
+  ref: 'Comments',
+  localField: '_id',
+  foreignField: 'post',
+});
