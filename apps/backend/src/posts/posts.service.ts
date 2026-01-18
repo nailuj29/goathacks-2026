@@ -25,7 +25,7 @@ export class PostsService {
       .find({ author: userId })
       .populate({
         path: 'author',
-        select: 'name username',
+        select: 'name username _id',
       })
       .exec();
 
@@ -37,7 +37,7 @@ export class PostsService {
       .find()
       .populate({
         path: 'author',
-        select: 'name username',
+        select: 'name username _id',
       })
       .exec();
 
