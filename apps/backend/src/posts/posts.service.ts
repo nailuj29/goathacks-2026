@@ -27,6 +27,19 @@ export class PostsService {
         path: 'author',
         select: 'name username _id',
       })
+      .populate({
+        path: 'comments',
+        options: {
+          sort: {
+            createdAt: -1,
+          },
+        },
+        populate: {
+          path: 'author',
+          select: 'name username _id',
+        },
+        select: 'text author',
+      })
       .exec();
 
     return posts;
@@ -38,6 +51,19 @@ export class PostsService {
       .populate({
         path: 'author',
         select: 'name username _id',
+      })
+      .populate({
+        path: 'comments',
+        options: {
+          sort: {
+            createdAt: -1,
+          },
+        },
+        populate: {
+          path: 'author',
+          select: 'name username _id',
+        },
+        select: 'text author',
       })
       .exec();
 

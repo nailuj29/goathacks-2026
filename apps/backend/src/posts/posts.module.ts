@@ -17,5 +17,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
   ],
   controllers: [PostsController],
   providers: [PostsService, ...postsProviders],
+  exports: [PostsService, ...postsProviders],
 })
 export class PostsModule {}
