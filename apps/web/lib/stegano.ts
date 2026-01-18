@@ -132,7 +132,6 @@ async function encodeImage(image: File, data: Uint8Array) {
 
 	if (startScanLocation === -1) {
 		console.error('Could not find start of scan in image');
-		return;
 	}
 
 	const leftImageData = imageData.slice(0, startScanLocation);
@@ -150,7 +149,7 @@ async function encodeImage(image: File, data: Uint8Array) {
 	newImageData.set(data, leftImageData.length + 4);
 	newImageData.set(rightImageData, leftImageData.length + 2 + appSegmentLength);
 
-	return new Blob([newImageData], { type: image.type });
+	return new File([newImageData], image.name, { type: image.type });
 }
 
 async function decodeImage(image: Blob): Promise<Uint8Array | undefined> {
@@ -188,7 +187,7 @@ export async function createStegImage(
 	image: File,
 	attachments: File[],
 	key: string,
-) {
+): Promise<File> {
 	const payload = await createPayload(attachments, key);
 	return await encodeImage(image, payload);
 }

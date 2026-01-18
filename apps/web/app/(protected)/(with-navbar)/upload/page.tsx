@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SModeContext } from '../layout';
+import { createStegImage, decryptStegImage } from '@/lib/stegano';
 
 export default function UploadPage() {
 	const [isLoading, setIsLoading] = useState(false);
@@ -15,8 +16,18 @@ export default function UploadPage() {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setIsLoading(true);
-		// Handle form submission here
-		setTimeout(() => setIsLoading(false), 1000);
+
+		const formData = new FormData(e.currentTarget);
+		let image = formData.get('image') as File;
+		const caption = formData.get('caption') as string;
+		const hiddenMessage = formData.get('h-message') as File | null;
+		const key = formData.get('h-key') as string | null;
+
+		if (sMode && hiddenMessage && key) {
+			image = await createStegImage(image, [hiddenMessage], key);
+		}
+
+		setIsLoading(false);
 	};
 
 	return (
@@ -26,13 +37,13 @@ export default function UploadPage() {
 			<form onSubmit={handleSubmit} className="space-y-6">
 				<div className="space-y-2">
 					<Label htmlFor="image">Image</Label>
-					<Input id="image" type="file" accept="image/*" required />
+					<Input name="image" type="file" accept="image/*" required />
 				</div>
 
 				<div className="space-y-2">
 					<Label htmlFor="caption">Caption</Label>
 					<Input
-						id="caption"
+						name="caption"
 						type="text"
 						placeholder="Write a caption..."
 						required
@@ -42,14 +53,14 @@ export default function UploadPage() {
 				{sMode && (
 					<div className="space-y-2">
 						<Label htmlFor="hidden-message">Hidden Message</Label>
-						<Input id="hidden-message" type="text" placeholder="..." required />
+						<Input name="h-message" type="file" placeholder="..." required />
 					</div>
 				)}
 
 				{sMode && (
 					<div className="space-y-2">
 						<Label htmlFor="key">Key</Label>
-						<Input id="key" type="text" placeholder="..." required />
+						<Input name="h-key" type="text" placeholder="..." required />
 					</div>
 				)}
 
